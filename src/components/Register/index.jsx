@@ -51,7 +51,7 @@ const Register = () => {
     setPasswordVisibility('password')
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     //* Test that no element of the form is empty
@@ -68,8 +68,19 @@ const Register = () => {
     if (errorInForm) {
       console.log('Espacios vacios')
     }
-
     // !Request to the database
+
+    try {
+      const res = await fetch('http://127.0.0.1:8080/crear', {
+        method: 'POST',
+        body: JSON.stringify(values)
+      })
+      const data = await res.json()
+
+      console.log(data)
+    } catch (error) {
+
+    }
   }
 
   return (
