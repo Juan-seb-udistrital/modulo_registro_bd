@@ -95,15 +95,19 @@ const Register = () => {
   }
 
   if (data) {
-    <section className='w-full sm:w-[400px] h-14 px-6 py-4 m-auto shadow-md bg-slate-100 border border-slate-200 rounded-md'>
-      <p className='w-full'>Tu registro ha finalizado exitosamente ✅</p>
-    </section>
+    return (
+      <section className='w-full sm:w-[400px] h-14 px-6 py-4 m-auto shadow-md bg-slate-100 border border-slate-200 rounded-md'>
+        <p className='w-full'>Tu registro ha finalizado exitosamente ✅</p>
+      </section>
+    )
   }
 
   if (error) {
-    <section className='w-full sm:w-[400px] h-14 px-6 py-4 m-auto shadow-md bg-slate-100 border border-slate-200 rounded-md'>
-      <p className='w-full'>Ocurrio un error en tu petición ❌</p>
-    </section>
+    return (
+      <section className='w-full sm:w-[400px] h-14 px-6 py-4 m-auto shadow-md bg-slate-100 border border-slate-200 rounded-md'>
+        <p className='w-full'>Ocurrio un error en tu petición ❌</p>
+      </section>
+    )
   }
 
   return (
