@@ -26,9 +26,9 @@ const validateID = (id) => {
 
 const validateEmail = (email) => {
   let error
-  const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+  const regex = /^("(?:[!#-[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z^-\u{10FFFF}])*|\[[!-Z^-\u{10FFFF}]*\])$/u
 
-  if (email.length > 25 || email.length < 3 || !regex.test(email)) {
+  if (email.length < 7 || !regex.test(email)) {
     error = 'El email no es correcto'
   }
 

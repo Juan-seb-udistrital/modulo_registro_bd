@@ -1,4 +1,4 @@
-import { useReducer, useRef, useState } from 'react'
+import { useReducer, useState } from 'react'
 import { initialStateRegister, registerReducer } from '@/reducers/registerReducer'
 import { TYPES_REGISTER_FORM } from '@/actions/register_actions'
 import { TOUCHED_STATES } from '@/helpers/touched_states'
@@ -8,7 +8,9 @@ const Register = () => {
   const { values, errors, touched } = state
 
   const [passwordVisibility, setPasswordVisibility] = useState('password')
-  const inputPassword = useRef(null)
+  const [data, setData] = useState(null)
+  const [error, setError] = useState(null)
+  const [errorInForm, setErrorInForm] = useState(null)
 
   const dispatchReducer = (name, value) => {
     if (name === 'name') {
@@ -55,7 +57,7 @@ const Register = () => {
     e.preventDefault()
 
     //* Test that no element of the form is empty
-    const errorInForm = Object.entries(values).some(element => {
+    const isValueEmpty = Object.entries(values).some(element => {
       if (element[1].trim() === '') {
         return true
       }
@@ -63,24 +65,45 @@ const Register = () => {
     })
 
     //* The form has no errors
-    if (Object.entries(errors).length !== 0) return
-
-    if (errorInForm) {
-      console.log('Espacios vacios')
+    if (Object.entries(errors).length !== 0) {
+      setErrorInForm(true)
     }
-    // !Request to the database
+
+    if (isValueEmpty) {
+      setErrorInForm(true)
+      console.log('Espacios vacios')
+      return
+    }
+
+    setErrorInForm(null)
 
     try {
       const res = await fetch('http://127.0.0.1:8080/crear', {
         method: 'POST',
-        body: JSON.stringify(values)
+        body: JSON.stringify(values),
+        headers: {
+          'Content-type': 'application/json'
+        }
       })
       const data = await res.json()
 
-      console.log(data)
+      setData(data)
     } catch (error) {
-
+      console.log(error)
+      setError(error)
     }
+  }
+
+  if (data) {
+    <section className='w-full sm:w-[400px] h-14 px-6 py-4 m-auto shadow-md bg-slate-100 border border-slate-200 rounded-md'>
+      <p className='w-full'>Tu registro ha finalizado exitosamente ✅</p>
+    </section>
+  }
+
+  if (error) {
+    <section className='w-full sm:w-[400px] h-14 px-6 py-4 m-auto shadow-md bg-slate-100 border border-slate-200 rounded-md'>
+      <p className='w-full'>Ocurrio un error en tu petición ❌</p>
+    </section>
   }
 
   return (
@@ -177,7 +200,6 @@ const Register = () => {
               className='w-full px-1 py-2 mt-2 outline-none border border-blue-400 focus:ring-2 focus:ring-blue-400 rounded-md'
               onChange={handleChange}
               onBlur={handleBlur}
-              ref={inputPassword}
             />
             <p className='w-full text-right text-base text-blue-500 cursor-pointer' onClick={changeTypePassword}>
               <span className='hover:underline'>{passwordVisibility === 'password' ? 'Mostrar' : 'Ocultar'}</span>
@@ -195,6 +217,15 @@ const Register = () => {
               </div>
           }
         </section>
+        {
+          errorInForm && (
+            <section className='w-full mt-4'>
+              <p>
+                Tienes errores o espacios vacios en el formulario porfavor revisa tus datos
+              </p>
+            </section>
+          )
+        }
         <input type='submit' value='Registrar empleado' className='my-4 px-4 py-2 w-1/2 mx-auto bg-slate-500 rounded-md border border-gray-700 cursor-pointer' />
       </form>
     </section>
