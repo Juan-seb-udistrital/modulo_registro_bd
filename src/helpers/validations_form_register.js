@@ -13,12 +13,12 @@ const validateNames = (name) => {
 
 const validateID = (id) => {
   let error
-  const regex = /^((\d{8})|(\d{10})|(\d{11})|(\d{6}-\d{5}))?$/gm
+  const regex = /^((\d{11})|(\d{6}-\d{5}))?$/gm
 
   //* If the length of the string is less than 7 or greatest than 11 or does not comply with the regex
   //* then generate the error
   if (id.length < 7 || id.length > 11 || !regex.test(id)) {
-    error = 'Ingresa un numero de cedula real'
+    error = 'Ingresa un codigo estudiantil valido'
   }
 
   return error
@@ -49,4 +49,37 @@ const validatePassword = (password) => {
   return error
 }
 
-export { validateNames, validateID, validateEmail, validatePassword }
+const validatePhone = (phone) => {
+  let error
+  const regex = /^[0-9]*$/
+
+  if (phone.length < 7 || phone.length > 10 || !regex.test(phone)) {
+    error = 'Ingresa un numero de telefono real'
+  }
+
+  return error
+}
+
+const validateInstrument = (instrument) => {
+  let error
+  const regex = /^[a-zA-Z ,.'-]+$/i
+
+  if (instrument.length < 4 || instrument.length > 30 || !regex.test(instrument)) {
+    error = 'Ingresa un instrumento real'
+  }
+
+  return error
+}
+
+const validateDate = (date) => {
+  let error
+  const year = parseInt(date.split('-')[0])
+
+  if (year >= 2010) {
+    error = 'Ingresa una fecha de nacimiento valida'
+  }
+
+  return error
+}
+
+export { validateNames, validateID, validateEmail, validatePassword, validatePhone, validateInstrument, validateDate }

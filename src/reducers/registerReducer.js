@@ -1,22 +1,29 @@
 import { TYPES_REGISTER_FORM } from '@/actions/register_actions'
 import { TOUCHED_STATES } from '@/helpers/touched_states'
-import { validateNames, validateID, validateEmail, validatePassword } from '@/helpers/validations_form_register.js'
+import { validateNames, validateDate, validateID } from '@/helpers/validations_form_register.js'
+
+const now = new Date()
+const day = ('0' + now.getDate()).slice(-2)
+const month = ('0' + (now.getMonth() + 1)).slice(-2)
+const today = now.getFullYear() + '-' + (month) + '-' + (day)
 
 const initialStateRegister = {
   values: {
     name: '',
     last_name: '',
-    email: '',
-    id: '',
-    password: ''
+    birth_date: today,
+    project: '',
+    code: '',
+    document: ''
   },
   errors: {},
   touched: {
     name: TOUCHED_STATES.NOT_TOUCHED,
     last_name: TOUCHED_STATES.NOT_TOUCHED,
-    email: TOUCHED_STATES.NOT_TOUCHED,
-    id: TOUCHED_STATES.NOT_TOUCHED,
-    password: TOUCHED_STATES.NOT_TOUCHED
+    birth_date: TOUCHED_STATES.NOT_TOUCHED,
+    project: TOUCHED_STATES.NOT_TOUCHED,
+    code: TOUCHED_STATES.NOT_TOUCHED,
+    document: TOUCHED_STATES.NOT_TOUCHED
   }
 }
 
@@ -64,67 +71,88 @@ function registerReducer (state, action) {
             touched: { ...state.touched, last_name: TOUCHED_STATES.TOUCHED_OK }
           }
     }
-    case (TYPES_REGISTER_FORM.CHANGE_EMAIL): {
+    case (TYPES_REGISTER_FORM.CHANGE_BIRTH_DATE): {
       const value = action.payload
 
-      const error = validateEmail(value)
+      const error = validateDate(value)
 
-      if (!error && state.errors.email) {
-        delete state.errors.email
+      if (!error && state.errors.birth_date) {
+        delete state.errors.birth_date
       }
 
       return error
         ? {
-            values: { ...state.values, email: value },
-            errors: { ...state.errors, email: error },
-            touched: { ...state.touched, email: TOUCHED_STATES.TOUCHED_WITH_ERROR }
+            values: { ...state.values, birth_date: value },
+            errors: { ...state.errors, birth_date: error },
+            touched: { ...state.touched, birth_date: TOUCHED_STATES.TOUCHED_WITH_ERROR }
           }
         : {
-            values: { ...state.values, email: value },
+            values: { ...state.values, birth_date: value },
             errors: { ...state.errors },
-            touched: { ...state.touched, email: TOUCHED_STATES.TOUCHED_OK }
+            touched: { ...state.touched, birth_date: TOUCHED_STATES.TOUCHED_OK }
           }
     }
-    case (TYPES_REGISTER_FORM.CHANGE_ID): {
+    case (TYPES_REGISTER_FORM.CHANGE_CODE): {
       const value = action.payload
 
       const error = validateID(value)
 
-      if (!error && state.errors.id) {
-        delete state.errors.id
+      if (!error && state.errors.code) {
+        delete state.errors.code
       }
 
       return error
         ? {
-            values: { ...state.values, id: value },
-            errors: { ...state.errors, id: error },
-            touched: { ...state.touched, id: TOUCHED_STATES.TOUCHED_WITH_ERROR }
+            values: { ...state.values, code: value },
+            errors: { ...state.errors, code: error },
+            touched: { ...state.touched, code: TOUCHED_STATES.TOUCHED_WITH_ERROR }
           }
         : {
-            values: { ...state.values, id: value },
+            values: { ...state.values, code: value },
             errors: { ...state.errors },
-            touched: { ...state.touched, id: TOUCHED_STATES.TOUCHED_OK }
+            touched: { ...state.touched, code: TOUCHED_STATES.TOUCHED_OK }
           }
     }
-    case (TYPES_REGISTER_FORM.CHANGE_PASSWORD): {
+    case (TYPES_REGISTER_FORM.CHANGE_PROJECT): {
       const value = action.payload
 
-      const error = validatePassword(value)
+      const error = value === '' ? 'Selecciona un proyecto curricular' : null
 
-      if (!error && state.errors.password) {
-        delete state.errors.password
+      if (!error && state.errors.project) {
+        delete state.errors.project
       }
 
       return error
         ? {
-            values: { ...state.values, password: value },
-            errors: { ...state.errors, password: error },
-            touched: { ...state.touched, password: TOUCHED_STATES.TOUCHED_WITH_ERROR }
+            values: { ...state.values, project: value },
+            errors: { ...state.errors, project: error },
+            touched: { ...state.touched, project: TOUCHED_STATES.TOUCHED_WITH_ERROR }
           }
         : {
-            values: { ...state.values, password: value },
+            values: { ...state.values, project: value },
             errors: { ...state.errors },
-            touched: { ...state.touched, password: TOUCHED_STATES.TOUCHED_OK }
+            touched: { ...state.touched, project: TOUCHED_STATES.TOUCHED_OK }
+          }
+    }
+    case (TYPES_REGISTER_FORM.CHANGE_DOCUMENT): {
+      const value = action.payload
+
+      const error = value === '' ? 'Selecciona un tipo de documento' : null
+
+      if (!error && state.errors.document) {
+        delete state.errors.document
+      }
+
+      return error
+        ? {
+            values: { ...state.values, document: value },
+            errors: { ...state.errors, document: error },
+            touched: { ...state.touched, document: TOUCHED_STATES.TOUCHED_WITH_ERROR }
+          }
+        : {
+            values: { ...state.values, document: value },
+            errors: { ...state.errors },
+            touched: { ...state.touched, document: TOUCHED_STATES.TOUCHED_OK }
           }
     }
     default:
