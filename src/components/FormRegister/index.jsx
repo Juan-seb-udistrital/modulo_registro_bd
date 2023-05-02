@@ -12,11 +12,11 @@ const FormRegister = () => {
   const [error, setError] = useState(null)
   const [errorInForm, setErrorInForm] = useState(null)
 
-  const handleSubmit = () => {}
-
-  /* const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const values = { ...stateRegister.values, ...stateData.values }
+    const errors = { ...stateRegister.errors, ...stateData.errors }
     //* Test that no element of the form is empty
     const isValueEmpty = Object.entries(values).some(element => {
       if (element[1].trim() === '') {
@@ -54,7 +54,7 @@ const FormRegister = () => {
       setError(error)
     }
   }
- */
+
   if (data) {
     return (
       <section className='w-full sm:w-[400px] h-14 px-6 py-4 m-auto shadow-md bg-slate-100 border border-slate-200 rounded-md'>
